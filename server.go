@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -22,8 +23,8 @@ func main() {
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			auth := c.Request().Header.Get("Authorization")
-			if auth != "November 10, 2009" {
-				return c.NoContent(http.StatusUnauthorized)
+			if strings.Contains(auth, "wrong") {
+				return echo.ErrUnauthorized
 			}
 			return next(c)
 		}
