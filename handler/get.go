@@ -27,3 +27,26 @@ func GetExpensebyid(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, Err{Message: "can't scan expenses" + err.Error()})
 	}
 }
+
+func GetAllExpenses(c echo.Context) error {
+	getallex, err := DB.Prepare("SELECT id, title, amount, note, tags FROM expenses")
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, Err{Message: "can't prepare query all expenses" + err.Error()})
+	}
+
+	rows, err := getallex.Query()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, Err{Message: "can't query all expenses" + err.Error()})
+	}
+
+	allex := []Expenses{}
+	for rows.Next() {
+		ex := Expenses{}
+		err = rows.Scan(&ex.ID, &ex.Title, &ex.Amount, &ex.Note, pq.Array(&ex.Tags))
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, Err{Message: err.Error()})
+		}
+		allex = append(allex, ex)
+	}
+	return c.JSON(http.StatusOK, allex)
+}
