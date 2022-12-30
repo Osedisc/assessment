@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+	handler.InitDatabase(os.Getenv("DATABASE_URL"))
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
