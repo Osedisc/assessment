@@ -8,12 +8,13 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/Osedisc/assessment/handler"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
-	e := echo.New()
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
